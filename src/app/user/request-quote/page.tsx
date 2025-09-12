@@ -80,7 +80,7 @@ const RequestQuote: React.FC = () => {
 
       const data = await res.json();
       if (res.ok) {
-        alert('Quote  generated successfully!');
+        router.push('/user/view-quote/?id=' + data.quoteId);
       } else alert(data.error || 'Error');
     } catch (err) {
       console.error(err);

@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
       principalAmount,
       APR_BY_BAND[riskBand]
     );
-    await prisma.quote.create({
+    const createdQuote = await prisma.quote.create({
       data: {
         monthlyConsumptionKwh,
         systemSizeKw,
@@ -75,6 +75,7 @@ export async function POST(req: NextRequest) {
         riskBand,
         systemPrice,
         quotes,
+        quoteId: createdQuote.id,
       },
     });
   } catch (err: any) {
