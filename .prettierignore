@@ -1,0 +1,12 @@
+node_modules/
+build/
+dist/
+*.min.js
+*.bundle.js
+*.log
+*.lock
+*.json
+*.md
+coverage/
+public/
+.next/
