@@ -1,17 +1,24 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { formatDate } from '@/utils/calc';
 
-interface User {
+interface Quote {
   id: string;
-  name: string;
-  email: string;
-  role: string;
-  status: string;
+  systemPrice: number;
+  riskBand: string;
+  systemSizeKw: string;
+  createdAt: string;
 }
-
+interface UserQuotes {
+  user: {
+    email: string;
+    fullName: string;
+  };
+  quotes: Quote[];
+}
 export default function UserPage() {
-  const [users, setUsers] = useState<User[]>([]);
+  const [quotes, setQuotes] = useState<Quote[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,8 +26,8 @@ export default function UserPage() {
       try {
         const res = await fetch('/api/user/quotes');
         if (!res.ok) throw new Error('Failed to fetch users');
-        const data: User[] = await res.json();
-        setUsers(data);
+        const data: UserQuotes = await res.json();
+        setQuotes(data.quotes);
       } catch (err) {
         console.error(err);
       } finally {
@@ -63,20 +70,31 @@ export default function UserPage() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="border border-gray-300 px-4 py-2">Row1 Col1</td>
-                <td className="border border-gray-300 px-4 py-2">Row1 Col2</td>
-                <td className="border border-gray-300 px-4 py-2">Row1 Col3</td>
-                <td className="border border-gray-300 px-4 py-2">Row1 Col4</td>
-                <td className="border border-gray-300 px-4 py-2">Row1 Col5</td>
-              </tr>
-              <tr>
-                <td className="border border-gray-300 px-4 py-2">Row2 Col1</td>
-                <td className="border border-gray-300 px-4 py-2">Row2 Col2</td>
-                <td className="border border-gray-300 px-4 py-2">Row2 Col3</td>
-                <td className="border border-gray-300 px-4 py-2">Row2 Col4</td>
-                <td className="border border-gray-300 px-4 py-2">Row2 Col5</td>
-              </tr>
+              {quotes &&
+                quotes.map((quote) => (
+                  <tr key={quote.id}>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {formatDate(quote.createdAt)}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {quote.systemSizeKw} KW
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {quote.systemPrice} EUR
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {quote.riskBand}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      <Link
+                        href={`/user/quote?id=${quote.id}`}
+                        className="text-blue-600 hover:underline"
+                      >
+                        More Details
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
