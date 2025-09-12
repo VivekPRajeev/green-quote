@@ -1,22 +1,64 @@
 'use client';
+import { validateEmail } from '@/utils/validators';
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+interface FormData {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+interface FormErrors {
+  name?: string;
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
+}
 
 const RegisterPage: React.FC = () => {
-  const [form, setForm] = useState({
+  const router = useRouter();
+  const [form, setForm] = useState<FormData>({
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
   });
 
-  const [error, setError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    const error = validateField(e.target.name, e.target.value);
+    setErrors({ ...errors, [e.target.name]: error });
+  };
+
+  const validateField = (name: string, value: string) => {
+    switch (name) {
+      case 'name':
+        if (!value.trim()) return 'Name is required';
+        return '';
+      case 'email':
+        if (!value.trim()) return 'Email is required';
+        if (!validateEmail(value)) return 'Invalid email address';
+        return '';
+      case 'password':
+        if (!value.trim()) return 'Password is required';
+        if (value.length < 6) return 'Password must be at least 6 characters';
+        return '';
+      case 'confirmPassword':
+        if (!value.trim()) return 'Please confirm your password';
+        if (value !== form.password) return 'Passwords do not match';
+        return '';
+      default:
+        return '';
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
       const res = await fetch('/api/register', {
         method: 'POST',
@@ -25,8 +67,10 @@ const RegisterPage: React.FC = () => {
       });
 
       const data = await res.json();
-      if (res.ok) alert('Registered successfully!');
-      else alert(data.error || 'Error');
+      if (res.ok) {
+        alert('Registered successfully!');
+        router.push('/login');
+      } else alert(data.error || 'Error');
     } catch (err) {
       console.error(err);
       alert('Network error');
@@ -53,6 +97,9 @@ const RegisterPage: React.FC = () => {
               className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
               required
             />
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+            )}
           </div>
 
           <div className="flex flex-col">
@@ -69,6 +116,9 @@ const RegisterPage: React.FC = () => {
               className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
               required
             />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+            )}
           </div>
 
           <div className="flex flex-col">
@@ -88,6 +138,9 @@ const RegisterPage: React.FC = () => {
               className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
               required
             />
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+            )}
           </div>
 
           <div className="flex flex-col">
@@ -104,10 +157,14 @@ const RegisterPage: React.FC = () => {
               placeholder="Enter your password"
               value={form.confirmPassword}
               onChange={handleChange}
-
               className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
               required
             />
+            {errors.confirmPassword && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.confirmPassword}
+              </p>
+            )}
           </div>
           <button
             type="submit"
@@ -115,6 +172,11 @@ const RegisterPage: React.FC = () => {
           >
             Register
           </button>
+          <div className="mt-6 text-center">
+                    <Link href="/login" className="text-blue-600 hover:underline">
+                        Already have an account? Login
+                    </Link>
+                </div>
         </form>
       </div>
     </div>
