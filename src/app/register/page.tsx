@@ -29,6 +29,7 @@ const RegisterPage: React.FC = () => {
     switch (name) {
       case 'name':
         if (!value.trim()) return 'Name is required';
+        if (value.length < 3) return 'Name must be at least 3 characters';
         return '';
       case 'email':
         if (!value.trim()) return 'Email is required';

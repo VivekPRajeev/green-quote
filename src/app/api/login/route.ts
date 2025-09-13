@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { logError, logRequest, logResponse } from '@/utils/logger';
 
 const prisma = new PrismaClient();
 
@@ -12,9 +13,11 @@ interface JWTPayload {
 }
 export async function POST(req: NextRequest) {
   try {
+    logRequest({ method: req.method, url: req.url! });
     const { email, password } = await req.json();
 
     if (!email || !password) {
+      logResponse({ status: 400, url: req.url! });
       return NextResponse.json(
         { error: 'Email and password are required' },
         { status: 400 }
@@ -22,18 +25,22 @@ export async function POST(req: NextRequest) {
     }
 
     const user = await prisma.user.findUnique({ where: { email } });
-    if (!user)
+    if (!user) {
+      logResponse({ status: 401, url: req.url! });
       return NextResponse.json(
         { error: 'Invalid credentials' },
         { status: 401 }
       );
+    }
 
     const isValid = await bcrypt.compare(password, user.password);
-    if (!isValid)
+    if (!isValid) {
+      logResponse({ status: 401, url: req.url! });
       return NextResponse.json(
         { error: 'Invalid credentials' },
         { status: 401 }
       );
+    }
 
     const payload: JWTPayload = {
       id: user.id,
@@ -58,10 +65,10 @@ export async function POST(req: NextRequest) {
       maxAge: 3600, // 1 hour
     });
 
-    console.log('Login successful, token set in cookies');
+    logResponse({ status: 200, url: req.url! });
     return response;
   } catch (err) {
-    console.error(err);
+    logError({ error: err, url: req.url! });
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }

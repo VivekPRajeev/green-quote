@@ -3,12 +3,15 @@ import { Prisma, PrismaClient } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 import { calculateMonthlyPaymentPlans, MonthlyPaymentPlan } from '@/utils/calc';
 import { APR_BY_BAND } from '@/constants/quote';
+import { logError, logRequest, logResponse } from '@/utils/logger';
 
 const prisma = new PrismaClient();
 export async function POST(req: NextRequest) {
   try {
+    logRequest({ method: req.method, url: req.url! });
     const token = req.cookies.get('token')?.value;
     if (!token) {
+      logResponse({ status: 401, url: req.url! });
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET!);
@@ -25,15 +28,16 @@ export async function POST(req: NextRequest) {
       isNaN(systemSizeKw) ||
       isNaN(downPayment)
     ) {
+      logResponse({ status: 400, url: req.url! });
       return NextResponse.json(
         { error: 'Invalid fields provided' },
         { status: 400 }
       );
     }
     const systemPrice = systemSizeKw * 1200;
-
     const principalAmount = systemPrice - downPayment;
     if (principalAmount <= 0) {
+      logResponse({ status: 400, url: req.url! });
       return NextResponse.json(
         { error: 'Down payment must be less than system price' },
         { status: 400 }
@@ -64,6 +68,7 @@ export async function POST(req: NextRequest) {
         address: body.address,
       },
     });
+    logResponse({ status: 200, url: req.url! });
     return NextResponse.json({
       message: 'Quote Generated Successfully',
       data: {
@@ -79,6 +84,7 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (err: any) {
+    logError({ error: err, url: req.url! });
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

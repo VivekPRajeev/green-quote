@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import jwt from 'jsonwebtoken';
+import { logError, logRequest, logResponse } from '@/utils/logger';
 
 const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
   try {
+    logRequest({ method: req.method, url: req.url! });
     const token = req.cookies.get('token')?.value ?? '';
     const decoded = jwt.verify(token, process.env.JWT_SECRET!);
     const userId =
@@ -15,6 +17,7 @@ export async function GET(req: NextRequest) {
       select: { isAdmin: true },
     });
     if (!user || !user.isAdmin) {
+      logResponse({ status: 403, url: req.url! });
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -50,10 +53,10 @@ export async function GET(req: NextRequest) {
         },
       },
     });
-
+    logResponse({ status: 200, url: req.url! });
     return NextResponse.json({ data: quotes }, { status: 200 });
   } catch (err) {
-    console.error(err);
+    logError({ error: err, url: req.url! });
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
