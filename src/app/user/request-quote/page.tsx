@@ -2,7 +2,6 @@
 import { validateEmail } from '@/utils/validators';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 interface FormData {
   name: string;
   email: string;
@@ -80,7 +79,7 @@ const RequestQuote: React.FC = () => {
 
       const data = await res.json();
       if (res.ok) {
-        router.push('/user/request-quote/?id=' + data?.data?.quoteId);
+        router.push('/user/quote/?id=' + data?.data?.quoteId);
       } else alert(data.error || 'Error');
     } catch (err) {
       console.error(err);

@@ -27,6 +27,7 @@ const RegisterPage: React.FC = () => {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -60,6 +61,7 @@ const RegisterPage: React.FC = () => {
     e.preventDefault();
 
     try {
+      setLoading(true);
       const res = await fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -72,8 +74,9 @@ const RegisterPage: React.FC = () => {
         router.push('/login');
       } else alert(data.error || 'Error');
     } catch (err) {
-      console.error(err);
       alert('Network error');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -173,10 +176,10 @@ const RegisterPage: React.FC = () => {
             Register
           </button>
           <div className="mt-6 text-center">
-                    <Link href="/login" className="text-blue-600 hover:underline">
-                        Already have an account? Login
-                    </Link>
-                </div>
+            <Link href="/login" className="text-blue-600 hover:underline">
+              Already have an account? Login
+            </Link>
+          </div>
         </form>
       </div>
     </div>

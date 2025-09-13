@@ -1,0 +1,21 @@
+export interface QuoteDetails {
+  id: string;
+  fullName: string;
+  createdAt: string;
+  email: string;
+  address: string;
+  monthlyConsumptionKwh: number;
+  principalAmount: number;
+  systemSizeKw: number;
+  downPayment: number | null;
+  riskBand: 'A' | 'B' | 'C';
+  systemPrice: number;
+  monthlyPayment: number;
+  status: string;
+  offers: {
+    termYears: number;
+    apr: number;
+    principalUsed: number;
+    monthlyPayment: number;
+  }[];
+}
