@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
@@ -22,6 +21,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const email = searchParams.get('email');
     const name = searchParams.get('name');
+    const band = searchParams.get('band');
     //const limit = parseInt(searchParams.get('limit') || '10', 10);
     // const page = parseInt(searchParams.get('page') || '1', 10);
     const where: any = {};
@@ -33,6 +33,9 @@ export async function GET(req: NextRequest) {
         ...where.user,
         fullName: { contains: name, mode: 'insensitive' },
       };
+    }
+    if (band) {
+      where.riskBand = band;
     }
     const quotes = await prisma.quote.findMany({
       where,

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { formatDate } from '@/utils/calc';
 import AdminQuoteSearch from '@/components/AdminQuoteSearch';
+import Loader from '@/components/Loader';
 
 interface Quote {
   id: string;
@@ -68,7 +69,7 @@ export default function AdminPage() {
           <AdminQuoteSearch submitHandler={handleSearch} />
 
           {loading ? (
-            <div className="text-center text-gray-600">Loading...</div>
+            <Loader />
           ) : (
             <table className="w-full border-collapse border border-gray-300">
               <thead>
@@ -90,7 +91,7 @@ export default function AdminPage() {
                 </tr>
               </thead>
               <tbody>
-                {quotes &&
+                {quotes.length ? (
                   quotes.map((quote) => (
                     <tr key={quote.id}>
                       <td className="border border-gray-300 px-4 py-2">
@@ -120,7 +121,14 @@ export default function AdminPage() {
                         </Link>
                       </td>
                     </tr>
-                  ))}
+                  ))
+                ) : (
+                  <tr>
+                    <td className="text-center p-4" colSpan={7}>
+                      No records found
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           )}
