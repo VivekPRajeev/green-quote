@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { validateEmail } from '@/utils/validators';
 import Loader from '@/components/Loader';
 import { LoginData, LoginErrors } from '@/types/general';
+import FormInput from '@/components/FormInput';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -73,44 +74,29 @@ export default function LoginPage() {
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
         <form className="space-y-5" onSubmit={handleSubmit}>
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-400"
-              required
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-            )}
-          </div>
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-400"
-              required
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">{errors.password}</p>
-            )}
-          </div>
+          <FormInput
+            id="email"
+            label="Email"
+            type="email"
+            value={formData.email}
+            name="email"
+            placeholder="Enter your email"
+            handleChange={handleChange}
+            errorName={errors.email}
+            required
+          />
+          <FormInput
+            id="password"
+            label="Password"
+            type="password"
+            value={formData.password}
+            name="password"
+            placeholder="Enter your password"
+            handleChange={handleChange}
+            errorName={errors.password}
+            required
+          />
+
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition"

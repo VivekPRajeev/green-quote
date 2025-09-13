@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { RegistrationData, RegistrationErrors } from '@/types/general';
 import Loader from '@/components/Loader';
+import FormInput from '@/components/FormInput';
 
 const RegisterPage: React.FC = () => {
   const router = useRouter();
@@ -76,89 +77,50 @@ const RegisterPage: React.FC = () => {
         <h1 className="text-2xl font-semibold text-center mb-6">Register</h1>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
-          <div className="flex flex-col">
-            <label htmlFor="name" className="mb-1 text-gray-700 font-medium">
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              placeholder="Enter your name"
-              value={form.name}
-              onChange={handleChange}
-              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-              required
-            />
-            {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name}</p>
-            )}
-          </div>
-
-          <div className="flex flex-col">
-            <label htmlFor="email" className="mb-1 text-gray-700 font-medium">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Enter your email"
-              value={form.email}
-              onChange={handleChange}
-              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-              required
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-            )}
-          </div>
-
-          <div className="flex flex-col">
-            <label
-              htmlFor="password"
-              className="mb-1 text-gray-700 font-medium"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Enter your password"
-              value={form.password}
-              onChange={handleChange}
-              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-              required
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">{errors.password}</p>
-            )}
-          </div>
-
-          <div className="flex flex-col">
-            <label
-              htmlFor="password"
-              className="mb-1 text-gray-700 font-medium"
-            >
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              placeholder="Enter your password"
-              value={form.confirmPassword}
-              onChange={handleChange}
-              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-              required
-            />
-            {errors.confirmPassword && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.confirmPassword}
-              </p>
-            )}
-          </div>
+          <FormInput
+            name="name"
+            label="Name"
+            id="name"
+            type="text"
+            placeholder="Enter your name"
+            value={form.name}
+            handleChange={handleChange}
+            errorName={errors.name}
+            required
+          />
+          <FormInput
+            name="email"
+            label="Email"
+            id="email"
+            type="email"
+            placeholder="Enter your email"
+            value={form.email}
+            handleChange={handleChange}
+            errorName={errors.email}
+            required
+          />
+          <FormInput
+            name="password"
+            label="Password"
+            id="password"
+            type="password"
+            placeholder="Enter your password"
+            value={form.password}
+            handleChange={handleChange}
+            errorName={errors.password}
+            required
+          />
+          <FormInput
+            name="confirmPassword"
+            label="Confirm Password"
+            id="confirmPassword"
+            type="password"
+            placeholder="Enter your password"
+            value={form.confirmPassword}
+            handleChange={handleChange}
+            errorName={errors.confirmPassword}
+            required
+          />
           <button
             type="submit"
             className="w-full bg-blue-600 text-white font-medium py-2 rounded-md hover:bg-blue-700 transition-colors"

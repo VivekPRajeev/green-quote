@@ -7,7 +7,6 @@ const prisma = new PrismaClient();
 
 interface JWTPayload {
   id: string;
-  email: string;
   name: string;
   isAdmin: boolean;
 }
@@ -38,7 +37,6 @@ export async function POST(req: NextRequest) {
 
     const payload: JWTPayload = {
       id: user.id,
-      email: user.email,
       name: user.fullName,
       isAdmin: user.isAdmin,
     };

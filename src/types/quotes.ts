@@ -26,16 +26,16 @@ export interface RequestQuoteData {
   address: string;
   monthlyConsumptionKwh: number;
   systemSizeKw: number;
-  downPayment?: number;
+  downPayment: number;
 }
 
 export interface RequestQuoteErrors {
   name?: string;
   email?: string;
   address?: string;
-  monthlyConsumptionKwh?: number;
-  systemSizeKw?: number;
-  downPayment?: number;
+  monthlyConsumptionKwh?: string;
+  systemSizeKw?: string;
+  downPayment?: string;
   api?: string;
 }
 

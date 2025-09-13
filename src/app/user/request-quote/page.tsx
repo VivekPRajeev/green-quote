@@ -3,6 +3,7 @@ import { validateEmail } from '@/utils/validators';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { RequestQuoteData, RequestQuoteErrors } from '@/types/quotes';
+import FormInput from '@/components/FormInput';
 
 const RequestQuote: React.FC = () => {
   const router = useRouter();
@@ -78,132 +79,77 @@ const RequestQuote: React.FC = () => {
         </h1>
 
         <form className="space-y-9" onSubmit={handleSubmit}>
-          <div className="flex flex-col">
-            <label htmlFor="name" className="mb-1 text-gray-700 font-medium">
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              placeholder="Enter your name"
-              value={form.name}
-              onChange={handleChange}
-              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-              required
-            />
-            {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name}</p>
-            )}
-          </div>
+          <FormInput
+            id="name"
+            label="Name"
+            type="text"
+            value={form.name}
+            name="name"
+            placeholder="Enter your name"
+            handleChange={handleChange}
+            errorName={errors.name}
+            required
+          />
+          <FormInput
+            id="email"
+            label="Email"
+            type="email"
+            value={form.email}
+            name="email"
+            placeholder="Enter your email"
+            handleChange={handleChange}
+            errorName={errors.email}
+            required
+          />
+          <FormInput
+            id="address"
+            label="Address"
+            type="text"
+            value={form.address}
+            name="address"
+            placeholder="Enter your address"
+            handleChange={handleChange}
+            errorName={errors.address}
+            required
+          />
+          <FormInput
+            id="monthlyConsumptionKwh"
+            label="Monthly Consumption in Kwh"
+            type="number"
+            value={form.monthlyConsumptionKwh}
+            name="monthlyConsumptionKwh"
+            placeholder="Enter your Monthly Consumption in Kwh"
+            handleChange={handleChange}
+            errorName={errors.monthlyConsumptionKwh}
+            required
+          />
+          <FormInput
+            id="systemSizeKw"
+            label="System Size (Kw)"
+            type="number"
+            value={form.systemSizeKw}
+            name="systemSizeKw"
+            placeholder="Enter your system size"
+            handleChange={handleChange}
+            errorName={errors.systemSizeKw}
+            required
+          />
+          <FormInput
+            id="downPayment"
+            label="Down Payment (Optional)"
+            type="number"
+            value={form.downPayment}
+            name="downPayment"
+            placeholder="Enter your downPayment"
+            handleChange={handleChange}
+            errorName={errors.downPayment}
+          />
 
-          <div className="flex flex-col">
-            <label htmlFor="email" className="mb-1 text-gray-700 font-medium">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Enter your email"
-              value={form.email}
-              onChange={handleChange}
-              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-              required
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-            )}
-          </div>
-
-          <div className="flex flex-col">
-            <label htmlFor="address" className="mb-1 text-gray-700 font-medium">
-              Address
-            </label>
-            <input
-              type="text"
-              id="address"
-              name="address"
-              placeholder="Enter your address"
-              value={form.address}
-              onChange={handleChange}
-              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-              required
-            />
-            {errors.address && (
-              <p className="text-red-500 text-sm mt-1">{errors.address}</p>
-            )}
-          </div>
-
-          <div className="flex flex-col">
-            <label htmlFor="email" className="mb-1 text-gray-700 font-medium">
-              Monthly Consumption in Kwh
-            </label>
-            <input
-              type="number"
-              id="monthlyConsumptionKwh"
-              name="monthlyConsumptionKwh"
-              placeholder="Enter your Monthly Consumption in Kwh"
-              value={form.monthlyConsumptionKwh}
-              onChange={handleChange}
-              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-              required
-            />
-            {errors.monthlyConsumptionKwh && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.monthlyConsumptionKwh}
-              </p>
-            )}
-          </div>
-          <div className="flex flex-col">
-            <label
-              htmlFor="systemSizeKw"
-              className="mb-1 text-gray-700 font-medium"
-            >
-              System Size (Kw)
-            </label>
-            <input
-              type="number"
-              id="systemSizeKw"
-              name="systemSizeKw"
-              placeholder="Enter your system size"
-              value={form.systemSizeKw}
-              onChange={handleChange}
-              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-              required
-              inputMode="decimal"
-              pattern="[0-9]*"
-            />
-            {errors.systemSizeKw && (
-              <p className="text-red-500 text-sm mt-1">{errors.systemSizeKw}</p>
-            )}
-          </div>
-
-          <div className="flex flex-col">
-            <label
-              htmlFor="downPayment"
-              className="mb-1 text-gray-700 font-medium"
-            >
-              Down Payment (Optional)
-            </label>
-            <input
-              type="number"
-              id="downPayment"
-              name="downPayment"
-              placeholder="Enter your downPayment"
-              value={form.downPayment}
-              onChange={handleChange}
-              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-            />
-            {systemPrice && (
-              <p className="text-gray-500 text-sm mt-1">
-                Estimated System Price: ${systemPrice} EUR
-              </p>
-            )}
-            {errors.downPayment && (
-              <p className="text-red-500 text-sm mt-1">{errors.downPayment}</p>
-            )}
-          </div>
+          {systemPrice && (
+            <p className="text-gray-500 text-sm mt-1">
+              Estimated System Price: ${systemPrice} EUR
+            </p>
+          )}
           <button
             type="submit"
             className="w-full bg-blue-600 text-white font-medium py-2 rounded-md hover:bg-blue-700 transition-colors"
