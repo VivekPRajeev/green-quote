@@ -81,7 +81,7 @@ const RequestQuote: React.FC = () => {
 
       const data = await res.json();
       if (res.ok) {
-        router.push('/user/quote/?id=' + data?.data?.quoteId);
+        router.push('/user/quote?id=' + data?.data?.quoteId);
       } else alert(data.error || 'Error');
     } catch (err) {
       console.error(err);

@@ -41,7 +41,5 @@ export async function GET(req: NextRequest) {
       { error: 'Failed to fetch quotes' },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }

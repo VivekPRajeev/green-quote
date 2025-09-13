@@ -4,9 +4,11 @@ import jwt from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
 
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const id = searchParams.get('id');
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const id = params.id;
   const token = req.cookies.get('token')?.value ?? '';
   const decoded = jwt.verify(token, process.env.JWT_SECRET!);
   const userId =

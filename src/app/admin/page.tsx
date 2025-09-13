@@ -114,7 +114,7 @@ export default function AdminPage() {
                       </td>
                       <td className="border border-gray-300 px-4 py-2">
                         <Link
-                          href={`/user/quote?id=${quote.id}`}
+                          href={`/admin/quote/${quote.id}`}
                           className="text-blue-600 hover:underline"
                         >
                           More Details

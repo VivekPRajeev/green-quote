@@ -29,7 +29,12 @@ export async function middleware(req: NextRequest) {
   }
 }
 
-// Optionally, specify matcher for routes
 export const config = {
-  matcher: ['/admin', '/admin/:path*', '/user/:path*'],
+  matcher: [
+    '/admin',
+    '/admin/:path*',
+    '/user/:path*',
+    '/quotes',
+    '/quotes/:path*',
+  ],
 };

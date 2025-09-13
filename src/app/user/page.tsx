@@ -12,7 +12,7 @@ export default function UserPage() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch('/api/user/quotes');
+        const res = await fetch('/api/quotes');
         if (!res.ok) throw new Error('Failed to fetch users');
         const data: UserQuotes = await res.json();
         setQuotes(data.quotes);
@@ -72,7 +72,7 @@ export default function UserPage() {
                       </td>
                       <td className="border border-gray-300 px-4 py-2">
                         <Link
-                          href={`/user/quote?id=${quote.id}`}
+                          href={`/user/quote/${quote.id}`}
                           className="text-blue-600 hover:underline"
                         >
                           More Details
