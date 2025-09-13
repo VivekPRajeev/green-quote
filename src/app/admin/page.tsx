@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { formatDate } from '@/utils/calc';
+import AdminQuoteSearch from '@/components/AdminQuoteSearch';
 
 interface Quote {
   id: string;
@@ -36,12 +37,36 @@ export default function AdminPage() {
     fetchAllQuotes();
   }, []);
 
+  const handleSearch = async (formData: {
+    name?: string;
+    email?: string;
+    band?: string;
+  }) => {
+    setLoading(true);
+    try {
+      const query = new URLSearchParams();
+      if (formData.name) query.append('name', formData.name);
+      if (formData.email) query.append('email', formData.email);
+      if (formData.band) query.append('band', formData.band);
+      const res = await fetch(`/api/admin/quotes?${query.toString()}`);
+      if (!res.ok) throw new Error('Failed to fetch quotes');
+      const { data } = await res.json();
+      setQuotes(data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      {/* Card */}
       <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-3xl">
         <div className="text-2xl font-bold mb-4">Admin Dashboard</div>
+
         <div className="p-8">
+          <AdminQuoteSearch submitHandler={handleSearch} />
+
           {loading ? (
             <div className="text-center text-gray-600">Loading...</div>
           ) : (
