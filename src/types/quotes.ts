@@ -10,8 +10,6 @@ export interface QuoteDetails {
   downPayment: number | null;
   riskBand: 'A' | 'B' | 'C';
   systemPrice: number;
-  monthlyPayment: number;
-  status: string;
   offers: {
     termYears: number;
     apr: number;

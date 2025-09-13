@@ -1,25 +1,57 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import { FlatCompat } from '@eslint/eslintrc';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
+// Provides compatibility with older ESLint configs
 const compat = new FlatCompat({
-  baseDirectory: __dirname,
+  baseDirectory: process.cwd(),
+  recommended: true,
 });
 
-const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+export default [
+  // Base recommended configs
+  ...compat.extends('eslint:recommended'),
+  ...compat.extends('plugin:@typescript-eslint/recommended'),
+  ...compat.extends('plugin:react/recommended'),
+  ...compat.extends('plugin:react-hooks/recommended'),
+  ...compat.extends('plugin:jsx-a11y/recommended'),
+  ...compat.extends('next/core-web-vitals'),
+
+  // Ignore generated files and tests
   {
-    ignores: [
-      "node_modules/**",
-      ".next/**",
-      "out/**",
-      "build/**",
-      "next-env.d.ts",
+    files: [
+      'src/generated/**',
+      '**/*.test.ts',
+      '**/*.spec.ts',
+      '**/*.test.tsx',
+      '**/*.spec.tsx',
     ],
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-this-alias': 'off',
+      '@typescript-eslint/no-require-imports': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off',
+    },
+  },
+
+  // Apply strict linting to all other TS/TSX files
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        { argsIgnorePattern: '^_' },
+      ],
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-this-alias': 'error',
+      '@typescript-eslint/no-require-imports': 'error',
+      '@typescript-eslint/no-unused-expressions': 'error',
+      'react/prop-types': 'off',
+      'react/react-in-jsx-scope': 'off',
+    },
   },
 ];
-
-export default eslintConfig;

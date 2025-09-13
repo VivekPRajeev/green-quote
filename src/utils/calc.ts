@@ -20,7 +20,7 @@ export const calculateMonthlyPaymentPlans = (
   return plans;
 };
 
-const calculateMonthlyPaymentPlan = (
+export const calculateMonthlyPaymentPlan = (
   principal: number,
   apr: number,
   termYears: number

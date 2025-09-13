@@ -31,10 +31,9 @@ const AdminQuoteSearch: React.FC<AdminQuoteSearchProps> = ({
     if (data.email && !/\S+@\S+\.\S+/.test(data.email)) {
       newErrors.email = 'Invalid email format';
     }
-    if (data.name && data.name.length < 2) {
-      newErrors.name = 'Name must be at least 2 characters';
+    if (data.name && data.name.length < 3) {
+      newErrors.name = 'Name must be at least 3 characters';
     }
-    // Add any form validation logic here if needed
     return newErrors;
   };
 
