@@ -2,21 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { formatDate } from '@/utils/calc';
+import { Quote, UserQuotes } from '@/types/quotes';
+import Loader from '@/components/Loader';
 
-interface Quote {
-  id: string;
-  systemPrice: number;
-  riskBand: string;
-  systemSizeKw: string;
-  createdAt: string;
-}
-interface UserQuotes {
-  user: {
-    email: string;
-    fullName: string;
-  };
-  quotes: Quote[];
-}
 export default function UserPage() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [loading, setLoading] = useState(true);
@@ -40,7 +28,6 @@ export default function UserPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      {/* Card */}
       <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-3xl">
         <div className="text-2xl font-bold mb-4">User Dashboard</div>
         <div className="p-8">
@@ -53,7 +40,7 @@ export default function UserPage() {
             </Link>
           </div>
           {loading ? (
-            <div className="text-center text-gray-600">Loading...</div>
+            <Loader />
           ) : (
             <table className="w-full border-collapse border border-gray-300">
               <thead>

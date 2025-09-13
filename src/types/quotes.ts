@@ -19,3 +19,37 @@ export interface QuoteDetails {
     monthlyPayment: number;
   }[];
 }
+
+export interface RequestQuoteData {
+  name: string;
+  email: string;
+  address: string;
+  monthlyConsumptionKwh: number;
+  systemSizeKw: number;
+  downPayment?: number;
+}
+
+export interface RequestQuoteErrors {
+  name?: string;
+  email?: string;
+  address?: string;
+  monthlyConsumptionKwh?: number;
+  systemSizeKw?: number;
+  downPayment?: number;
+  api?: string;
+}
+
+export interface Quote {
+  id: string;
+  systemPrice: number;
+  riskBand: string;
+  systemSizeKw: string;
+  createdAt: string;
+}
+export interface UserQuotes {
+  user: {
+    email: string;
+    fullName: string;
+  };
+  quotes: Quote[];
+}

@@ -4,17 +4,7 @@ import { useState, ChangeEvent, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { validateEmail } from '@/utils/validators';
 import Loader from '@/components/Loader';
-
-interface LoginData {
-  email: string;
-  password: string;
-}
-
-interface LoginErrors {
-  email?: string;
-  password?: string;
-  api?: string;
-}
+import { LoginData, LoginErrors } from '@/types/general';
 
 export default function LoginPage() {
   const router = useRouter();

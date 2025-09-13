@@ -3,30 +3,19 @@ import { validateEmail } from '@/utils/validators';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-interface FormData {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-interface FormErrors {
-  name?: string;
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
-}
+import { RegistrationData, RegistrationErrors } from '@/types/general';
+import Loader from '@/components/Loader';
 
 const RegisterPage: React.FC = () => {
   const router = useRouter();
-  const [form, setForm] = useState<FormData>({
+  const [form, setForm] = useState<RegistrationData>({
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
   });
 
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [errors, setErrors] = useState<RegistrationErrors>({});
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,6 +71,7 @@ const RegisterPage: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      {loading && <Loader />}
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h1 className="text-2xl font-semibold text-center mb-6">Register</h1>
 

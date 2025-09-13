@@ -2,28 +2,11 @@
 import { validateEmail } from '@/utils/validators';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-interface FormData {
-  name: string;
-  email: string;
-  address: string;
-  monthlyConsumptionKwh: number;
-  systemSizeKw: number;
-  downPayment?: number;
-}
-
-interface FormErrors {
-  name?: string;
-  email?: string;
-  address?: string;
-  monthlyConsumptionKwh?: number;
-  systemSizeKw?: number;
-  downPayment?: number;
-  api?: string;
-}
+import { RequestQuoteData, RequestQuoteErrors } from '@/types/quotes';
 
 const RequestQuote: React.FC = () => {
   const router = useRouter();
-  const [form, setForm] = useState<FormData>({
+  const [form, setForm] = useState<RequestQuoteData>({
     name: '',
     email: '',
     address: '',
@@ -32,7 +15,7 @@ const RequestQuote: React.FC = () => {
     downPayment: 0,
   });
   const [systemPrice, setSystemPrice] = useState('');
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [errors, setErrors] = useState<RequestQuoteErrors>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
