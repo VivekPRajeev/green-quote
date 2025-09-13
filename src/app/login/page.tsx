@@ -57,13 +57,10 @@ export default function LoginPage() {
         setLoading(false);
         return;
       }
-      console.log(data);
       if (data.isAdmin) router.push('/admin');
       else router.push('/user');
     } catch (err) {
-      console.log('Error during login:', err);
       setErrors({ ...errors, api: 'Login Failed' });
-    } finally {
       setLoading(false);
     }
   };
