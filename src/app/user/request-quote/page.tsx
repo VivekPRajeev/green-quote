@@ -1,9 +1,10 @@
 'use client';
 import { validateEmail } from '@/utils/validators';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { RequestQuoteData, RequestQuoteErrors } from '@/types/quotes';
 import FormInput from '@/components/FormInput';
+import Loader from '@/components/Loader';
 
 const RequestQuote: React.FC = () => {
   const router = useRouter();
@@ -17,6 +18,23 @@ const RequestQuote: React.FC = () => {
   });
   const [systemPrice, setSystemPrice] = useState('');
   const [errors, setErrors] = useState<RequestQuoteErrors>({});
+  const [isloading, setIsLoading] = useState(false);
+  useEffect(() => {
+    setIsLoading(true);
+    fetch('/api/user/info')
+      .then(async (res) => {
+        if (res.ok) {
+          const data = await res.json();
+          setForm((prev) => ({
+            ...prev,
+            name: data?.data?.fullName,
+            email: data?.data?.email,
+          }));
+        }
+      })
+      .catch((err) => console.error('Error fetching user info:', err))
+      .finally(() => setIsLoading(false));
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -77,7 +95,7 @@ const RequestQuote: React.FC = () => {
         <h1 className="text-2xl font-semibold text-center mb-6">
           Request Quote
         </h1>
-
+        {isloading && <Loader />}
         <form className="space-y-9" onSubmit={handleSubmit}>
           <FormInput
             id="name"
