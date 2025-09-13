@@ -38,10 +38,6 @@ export default function UserPage() {
     fetchUsers();
   }, []);
 
-  const handleRequestQuote = () => {
-    alert('Request Quote clicked!');
-    // You can replace this with your API call later
-  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       {/* Card */}
@@ -56,47 +52,50 @@ export default function UserPage() {
               Request Quote
             </Link>
           </div>
-
-          <table className="w-full border-collapse border border-gray-300">
-            <thead>
-              <tr>
-                <th className="border border-gray-300 px-4 py-2">Date</th>
-                <th className="border border-gray-300 px-4 py-2">
-                  System size
-                </th>
-                <th className="border border-gray-300 px-4 py-2">Price</th>
-                <th className="border border-gray-300 px-4 py-2">Band</th>
-                <th className="border border-gray-300 px-4 py-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {quotes &&
-                quotes.map((quote) => (
-                  <tr key={quote.id}>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {formatDate(quote.createdAt)}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {quote.systemSizeKw} KW
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {quote.systemPrice} EUR
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {quote.riskBand}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      <Link
-                        href={`/user/quote?id=${quote.id}`}
-                        className="text-blue-600 hover:underline"
-                      >
-                        More Details
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+          {loading ? (
+            <div className="text-center text-gray-600">Loading...</div>
+          ) : (
+            <table className="w-full border-collapse border border-gray-300">
+              <thead>
+                <tr>
+                  <th className="border border-gray-300 px-4 py-2">Date</th>
+                  <th className="border border-gray-300 px-4 py-2">
+                    System size
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2">Price</th>
+                  <th className="border border-gray-300 px-4 py-2">Band</th>
+                  <th className="border border-gray-300 px-4 py-2">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {quotes &&
+                  quotes.map((quote) => (
+                    <tr key={quote.id}>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {formatDate(quote.createdAt)}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {quote.systemSizeKw} KW
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {quote.systemPrice} EUR
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {quote.riskBand}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        <Link
+                          href={`/user/quote?id=${quote.id}`}
+                          className="text-blue-600 hover:underline"
+                        >
+                          More Details
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </div>
