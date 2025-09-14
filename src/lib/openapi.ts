@@ -1,5 +1,6 @@
 import { healthErrorResponse, healthOkResponse } from '@/schema/health';
 import {
+  adminQuoteSchema,
   createQuoteResponseSchema,
   createQuoteSchema,
   getQuoteByIdResponseSchema,
@@ -40,6 +41,7 @@ export const openApiSpec = createDocument({
       createQuoteResponse: createQuoteResponseSchema,
       userQuotesResponse: userQuotesResponseSchema,
       userQuoteByIdResponse: getQuoteByIdResponseSchema,
+      adminQuotes: adminQuoteSchema,
     },
     securitySchemes: {
       BearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
@@ -191,6 +193,8 @@ export const openApiSpec = createDocument({
     },
     '/api/user/info': {
       get: {
+        tags: ['User'],
+
         responses: {
           '200': {
             description: ' User Info successfully retrieved',
@@ -240,6 +244,8 @@ export const openApiSpec = createDocument({
     },
     '/api/user/request-quote': {
       post: {
+        tags: ['User', 'Quotes'],
+
         requestBody: {
           content: {
             'application/json': {
@@ -296,6 +302,7 @@ export const openApiSpec = createDocument({
     },
     '/api/quotes': {
       get: {
+        tags: ['Quotes'],
         responses: {
           '200': {
             description: ' User quotes successfully retrieved',
@@ -345,6 +352,7 @@ export const openApiSpec = createDocument({
     },
     '/api/quotes/{id}': {
       get: {
+        tags: ['Quotes'],
         responses: {
           '200': {
             description: 'User quote by ID successfully retrieved',
@@ -415,6 +423,81 @@ export const openApiSpec = createDocument({
                     error: {
                       type: 'string',
                       example: 'Quote not found',
+                    },
+                  },
+                  required: ['error'],
+                },
+              },
+            },
+          },
+          '500': { $ref: '#/components/responses/InternalServerError' },
+        },
+      },
+    },
+    '/api/admin/quotes': {
+      get: {
+        tags: ['Admin', 'Quotes'],
+        description: 'Fetch quotes with optional filters (admin-only).',
+        parameters: [
+          {
+            name: 'email',
+            in: 'query',
+            required: false,
+            schema: { type: 'string' },
+            description: 'Filter by user email (partial match)',
+          },
+          {
+            name: 'name',
+            in: 'query',
+            required: false,
+            schema: { type: 'string' },
+            description: 'Filter by user full name (partial match)',
+          },
+          {
+            name: 'band',
+            in: 'query',
+            required: false,
+            schema: { type: 'string' },
+            description: 'Filter by risk band',
+          },
+        ],
+
+        responses: {
+          '200': {
+            description: 'List of quotes',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/adminQuotes' },
+              },
+            },
+          },
+          '401': {
+            description: 'Unauthorized  Request',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: {
+                      type: 'string',
+                      example: 'Unauthorized',
+                    },
+                  },
+                  required: ['error'],
+                },
+              },
+            },
+          },
+          '403': {
+            description: 'User does  not have  permission to  view quotes',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: {
+                      type: 'string',
+                      example: 'Forbidden',
                     },
                   },
                   required: ['error'],

@@ -107,5 +107,12 @@ export const quoteResponseSchema = z.object({
 export const getQuoteByIdResponseSchema = z.object({
   data: quoteResponseSchema,
 });
-export type CreateQuoteInput = z.infer<typeof createQuoteSchema>;
-export type CreateQuoteResponse = z.infer<typeof createQuoteResponseSchema>;
+
+export const adminQuoteSchema = z.object({
+  id: z.uuid().describe('Quote ID'),
+  systemPrice: z.number().describe('System price in USD'),
+  riskBand: z.string().describe('Risk band assigned'),
+  systemSizeKw: z.number().describe('System size in kW'),
+  createdAt: z.string().describe('Quote creation timestamp'),
+  user: userSchema,
+});
