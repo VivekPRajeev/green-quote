@@ -11,6 +11,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     const userPayload = JSON.parse(userHeader);
+
     const userId = userPayload.id;
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -30,7 +31,6 @@ export async function GET(req: NextRequest) {
         createdAt: true,
       },
     });
-
     logResponse({ status: 200, url: req.url! });
     return NextResponse.json({ user, quotes }, { status: 200 });
   } catch (error) {

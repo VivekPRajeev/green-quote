@@ -4,6 +4,8 @@ import { prisma } from '@/lib/prisma';
 import { calculateMonthlyPaymentPlans, MonthlyPaymentPlan } from '@/utils/calc';
 import { APR_BY_BAND } from '@/constants/quote';
 import { logError, logRequest, logResponse } from '@/utils/logger';
+import { validateWith } from '@/lib/validation';
+import { createQuoteSchema } from '@/schema/quote';
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,10 +18,15 @@ export async function POST(req: NextRequest) {
     const userPayload = JSON.parse(userHeader);
     const userId = userPayload.id;
     const body = await req.json();
+    const validation = validateWith(createQuoteSchema, body);
+    if (!validation.ok) {
+      logResponse({ status: 400, url: req.url! });
+      return validation.res;
+    }
 
-    const monthlyConsumptionKwh = Number(body.monthlyConsumptionKwh);
-    const systemSizeKw = Number(body.systemSizeKw);
-    const downPayment = Number(body.downPayment) || 0;
+    const monthlyConsumptionKwh = validation.data.monthlyConsumptionKwh;
+    const systemSizeKw = validation.data.systemSizeKw;
+    const downPayment = validation.data.downPayment;
 
     if (
       isNaN(monthlyConsumptionKwh) ||

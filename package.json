@@ -18,7 +18,10 @@
     "next": "15.5.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "zod": "^4.1.8"
+    "swagger-ui-dist": "^5.29.0",
+    "swagger-ui-react": "^5.29.0",
+    "zod": "^4.1.8",
+    "zod-openapi": "^5.4.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.28.3",
