@@ -9,14 +9,13 @@ const prisma = new PrismaClient();
 export async function POST(req: NextRequest) {
   try {
     logRequest({ method: req.method, url: req.url! });
-    const token = req.cookies.get('token')?.value;
-    if (!token) {
+    const userHeader = req.headers.get('x-user');
+    if (!userHeader) {
       logResponse({ status: 401, url: req.url! });
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
-    const userId =
-      typeof decoded === 'object' && 'id' in decoded ? decoded.id : null;
+    const userPayload = JSON.parse(userHeader);
+    const userId = userPayload.id;
     const body = await req.json();
 
     const monthlyConsumptionKwh = Number(body.monthlyConsumptionKwh);

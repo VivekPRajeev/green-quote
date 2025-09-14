@@ -1,30 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
-import jwt from 'jsonwebtoken';
 import { logError, logRequest, logResponse } from '@/utils/logger';
-import { log } from 'console';
 
 const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
   try {
     logRequest({ method: req.method, url: req.url! });
-    const token = req.cookies.get('token')?.value;
-    if (!token) {
+    const userHeader = req.headers.get('x-user');
+    if (!userHeader) {
       logResponse({ status: 401, url: req.url! });
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
-    const userId =
-      typeof decoded === 'object' && 'id' in decoded ? decoded.id : null;
-    if (!userId) {
-      logResponse({ status: 401, url: req.url! });
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
-    }
+    const userPayload = JSON.parse(userHeader);
+    const userId = userPayload.id;
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: { email: true, fullName: true },
     });
+    if (!user) {
+      logResponse({ status: 404, url: req.url! });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
     const quotes = await prisma.quote.findMany({
       where: { userId: userId },
       select: {
@@ -36,10 +33,6 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    if (!user) {
-      logResponse({ status: 404, url: req.url! });
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
     logResponse({ status: 200, url: req.url! });
     return NextResponse.json({ user, quotes }, { status: 200 });
   } catch (error) {

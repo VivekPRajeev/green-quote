@@ -8,14 +8,14 @@ const prisma = new PrismaClient();
 export async function GET(req: NextRequest, { params }: { params: any }) {
   logRequest({ method: req.method, url: req.url! });
   const id = params.id;
-  const token = req.cookies.get('token')?.value ?? '';
-  const decoded = jwt.verify(token, process.env.JWT_SECRET!);
-  const userId =
-    typeof decoded === 'object' && 'id' in decoded ? decoded.id : null;
-  const isAdmin =
-    typeof decoded === 'object' && 'isAdmin' in decoded
-      ? decoded.isAdmin
-      : null;
+  const userHeader = req.headers.get('x-user');
+  if (!userHeader) {
+    logResponse({ status: 401, url: req.url! });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  const userPayload = JSON.parse(userHeader);
+  const userId = userPayload.id;
+  const isAdmin = userPayload.isAdmin;
 
   if (!id) {
     logResponse({ status: 400, url: req.url! });

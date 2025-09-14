@@ -7,10 +7,13 @@ const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
   logRequest({ method: req.method, url: req.url! });
-  const token = req.cookies.get('token')?.value ?? '';
-  const decoded = jwt.verify(token, process.env.JWT_SECRET!);
-  const userId =
-    typeof decoded === 'object' && 'id' in decoded ? decoded.id : null;
+  const userHeader = req.headers.get('x-user');
+  if (!userHeader) {
+    logResponse({ status: 401, url: req.url! });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  const userPayload = JSON.parse(userHeader);
+  const userId = userPayload.id;
   try {
     const userDetails = await prisma.user.findUnique({
       where: { id: userId || undefined },
