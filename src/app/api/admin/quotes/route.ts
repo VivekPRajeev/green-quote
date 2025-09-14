@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-import jwt from 'jsonwebtoken';
+import { prisma } from '@/lib/prisma';
 import { logError, logRequest, logResponse } from '@/utils/logger';
-
-const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
   try {
     logRequest({ method: req.method, url: req.url! });
-    const token = req.cookies.get('token')?.value ?? '';
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
-    const userId =
-      typeof decoded === 'object' && 'id' in decoded ? decoded.id : null;
+    const userHeader = req.headers.get('x-user');
+    if (!userHeader) {
+      logResponse({ status: 401, url: req.url! });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    const userPayload = JSON.parse(userHeader);
+    const userId = userPayload.id;
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: { isAdmin: true },

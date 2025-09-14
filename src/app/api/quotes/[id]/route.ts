@@ -1,21 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Prisma, PrismaClient } from '@prisma/client';
-import jwt from 'jsonwebtoken';
-import { logError, logRequest, logResponse } from '@/utils/logger';
+import { Prisma } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 
-const prisma = new PrismaClient();
+import { logError, logRequest, logResponse } from '@/utils/logger';
 
 export async function GET(req: NextRequest, { params }: { params: any }) {
   logRequest({ method: req.method, url: req.url! });
   const id = params.id;
-  const token = req.cookies.get('token')?.value ?? '';
-  const decoded = jwt.verify(token, process.env.JWT_SECRET!);
-  const userId =
-    typeof decoded === 'object' && 'id' in decoded ? decoded.id : null;
-  const isAdmin =
-    typeof decoded === 'object' && 'isAdmin' in decoded
-      ? decoded.isAdmin
-      : null;
+  const userHeader = req.headers.get('x-user');
+  if (!userHeader) {
+    logResponse({ status: 401, url: req.url! });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  const userPayload = JSON.parse(userHeader);
+  const userId = userPayload.id;
+  const isAdmin = userPayload.isAdmin;
 
   if (!id) {
     logResponse({ status: 400, url: req.url! });
@@ -53,7 +52,7 @@ export async function GET(req: NextRequest, { params }: { params: any }) {
     }
     const { userId: _omit, ...quoteWithoutUserId } = quote;
     logResponse({ status: 200, url: req.url! });
-    return NextResponse.json({ data: quoteWithoutUserId, status: 200 });
+    return NextResponse.json({ data: quoteWithoutUserId }, { status: 200 });
   } catch (error) {
     logError({ error: error, url: req.url! });
     return NextResponse.json({ error: 'Server error' }, { status: 500 });

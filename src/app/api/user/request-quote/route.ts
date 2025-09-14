@@ -1,39 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Prisma, PrismaClient } from '@prisma/client';
-import jwt from 'jsonwebtoken';
+import { Prisma } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 import { calculateMonthlyPaymentPlans, MonthlyPaymentPlan } from '@/utils/calc';
 import { APR_BY_BAND } from '@/constants/quote';
 import { logError, logRequest, logResponse } from '@/utils/logger';
+import { validateWith } from '@/lib/validation';
+import { createQuoteSchema } from '@/schema/quote';
 
-const prisma = new PrismaClient();
 export async function POST(req: NextRequest) {
   try {
     logRequest({ method: req.method, url: req.url! });
-    const token = req.cookies.get('token')?.value;
-    if (!token) {
+    const userHeader = req.headers.get('x-user');
+    if (!userHeader) {
       logResponse({ status: 401, url: req.url! });
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
-    const userId =
-      typeof decoded === 'object' && 'id' in decoded ? decoded.id : null;
+    const userPayload = JSON.parse(userHeader);
+    const userId = userPayload.id;
     const body = await req.json();
-
-    const monthlyConsumptionKwh = Number(body.monthlyConsumptionKwh);
-    const systemSizeKw = Number(body.systemSizeKw);
-    const downPayment = Number(body.downPayment) || 0;
-
-    if (
-      isNaN(monthlyConsumptionKwh) ||
-      isNaN(systemSizeKw) ||
-      isNaN(downPayment)
-    ) {
+    const validation = validateWith(createQuoteSchema, body);
+    if (!validation.ok) {
       logResponse({ status: 400, url: req.url! });
-      return NextResponse.json(
-        { error: 'Invalid fields provided' },
-        { status: 400 }
-      );
+      return validation.res;
     }
+
+    const monthlyConsumptionKwh = validation.data.monthlyConsumptionKwh;
+    const systemSizeKw = validation.data.systemSizeKw;
+    const downPayment = validation.data.downPayment;
+
     const systemPrice = systemSizeKw * 1200;
     const principalAmount = systemPrice - downPayment;
     if (principalAmount <= 0) {
