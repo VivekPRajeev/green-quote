@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Prisma, PrismaClient } from '@prisma/client';
-import jwt from 'jsonwebtoken';
+import { Prisma } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 import { logError, logRequest, logResponse } from '@/utils/logger';
-
-const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
   logRequest({ method: req.method, url: req.url! });

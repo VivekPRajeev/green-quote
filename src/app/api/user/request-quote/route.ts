@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Prisma, PrismaClient } from '@prisma/client';
-import jwt from 'jsonwebtoken';
+import { Prisma } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 import { calculateMonthlyPaymentPlans, MonthlyPaymentPlan } from '@/utils/calc';
 import { APR_BY_BAND } from '@/constants/quote';
 import { logError, logRequest, logResponse } from '@/utils/logger';
 
-const prisma = new PrismaClient();
 export async function POST(req: NextRequest) {
   try {
     logRequest({ method: req.method, url: req.url! });

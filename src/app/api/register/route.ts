@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
 import { logError, logRequest, logResponse } from '@/utils/logger';
 import { validateEmail } from '@/utils/validators';
-const bcrypt = require('bcryptjs');
+import { prisma } from '@/lib/prisma';
 
-const prisma = new PrismaClient();
+const bcrypt = require('bcryptjs');
 
 export async function POST(req: NextRequest) {
   try {
