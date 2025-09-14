@@ -166,6 +166,40 @@ export const openApiSpec = createDocument({
               },
             },
           },
+          '401': {
+            description: 'Unauthorized  Request',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: {
+                      type: 'string',
+                      example: 'Unauthorized',
+                    },
+                  },
+                  required: ['error'],
+                },
+              },
+            },
+          },
+          '404': {
+            description: 'Entry not found',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: {
+                      type: 'string',
+                      example: 'User not found',
+                    },
+                  },
+                  required: ['error'],
+                },
+              },
+            },
+          },
         },
       },
     },
