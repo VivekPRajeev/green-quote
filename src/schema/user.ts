@@ -49,10 +49,7 @@ export const registerRequestSchema = z.object({
 
 export const registerResponseSchema = z.object({
   user: z.object({
-    id: z.string().meta({
-      description: 'User  ID of registered user',
-      example: '123asdw-1233sad-231ohze',
-    }),
+    id: z.uuid().describe('Unique identifier of the user'),
     email: z.email().meta({
       description: 'Users Email',
       example: 'john.doe@gmail.com',

@@ -1,4 +1,8 @@
-import { createQuoteResponseSchema, createQuoteSchema } from '@/schema/quote';
+import {
+  createQuoteResponseSchema,
+  createQuoteSchema,
+  userQuotesResponseSchema,
+} from '@/schema/quote';
 import {
   loginRequestSchema,
   loginResponseSchema,
@@ -30,6 +34,7 @@ export const openApiSpec = createDocument({
       userInfoResponse: userInfoResponseSchema,
       createQuote: createQuoteSchema,
       createQuoteResponse: createQuoteResponseSchema,
+      userQuotesResponse: userQuotesResponseSchema,
     },
     securitySchemes: {
       BearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
@@ -265,6 +270,54 @@ export const openApiSpec = createDocument({
                     error: {
                       type: 'string',
                       example: 'Internal server error',
+                    },
+                  },
+                  required: ['error'],
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/api/quotes': {
+      get: {
+        responses: {
+          '200': {
+            description: ' User quotes successfully retrieved',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/userQuotesResponse' },
+              },
+            },
+          },
+          '401': {
+            description: 'Unauthorized  Request',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: {
+                      type: 'string',
+                      example: 'Unauthorized',
+                    },
+                  },
+                  required: ['error'],
+                },
+              },
+            },
+          },
+          '404': {
+            description: 'Entry not found',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: {
+                      type: 'string',
+                      example: 'User not found',
                     },
                   },
                   required: ['error'],

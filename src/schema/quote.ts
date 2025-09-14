@@ -58,5 +58,22 @@ export const createQuoteResponseSchema = z.object({
   }),
 });
 
+export const quoteItemSchema = z.object({
+  id: z.uuid().describe('Unique identifier of the quote'),
+  systemPrice: z.number().describe('Total system price'),
+  riskBand: z.enum(['A', 'B', 'C']).describe('Risk band of the quote'),
+  systemSizeKw: z.number().describe('System size in kW'),
+  createdAt: z.string().describe('Timestamp when the quote was created'),
+});
+
+const userSchema = z.object({
+  email: z.email().describe('User email'),
+  fullName: z.string().describe('User full name'),
+});
+
+export const userQuotesResponseSchema = z.object({
+  user: userSchema,
+  quotes: z.array(quoteItemSchema),
+});
 export type CreateQuoteInput = z.infer<typeof createQuoteSchema>;
 export type CreateQuoteResponse = z.infer<typeof createQuoteResponseSchema>;
