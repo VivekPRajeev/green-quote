@@ -106,7 +106,6 @@ export const quoteResponseSchema = z.object({
 
 export const getQuoteByIdResponseSchema = z.object({
   data: quoteResponseSchema,
-  status: z.number().describe('HTTP status code').default(200),
 });
 export type CreateQuoteInput = z.infer<typeof createQuoteSchema>;
 export type CreateQuoteResponse = z.infer<typeof createQuoteResponseSchema>;

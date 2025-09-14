@@ -52,7 +52,7 @@ export async function GET(req: NextRequest, { params }: { params: any }) {
     }
     const { userId: _omit, ...quoteWithoutUserId } = quote;
     logResponse({ status: 200, url: req.url! });
-    return NextResponse.json({ data: quoteWithoutUserId, status: 200 });
+    return NextResponse.json({ data: quoteWithoutUserId }, { status: 200 });
   } catch (error) {
     logError({ error: error, url: req.url! });
     return NextResponse.json({ error: 'Server error' }, { status: 500 });

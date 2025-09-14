@@ -1,3 +1,4 @@
+import { healthErrorResponse, healthOkResponse } from '@/schema/health';
 import {
   createQuoteResponseSchema,
   createQuoteSchema,
@@ -28,6 +29,8 @@ export const openApiSpec = createDocument({
   },
   components: {
     schemas: {
+      heatlhResponse: healthOkResponse,
+      healthErrorResponse: healthErrorResponse,
       registerRequest: registerRequestSchema,
       registerResponse: registerResponseSchema,
       loginRequest: loginRequestSchema,
@@ -60,6 +63,29 @@ export const openApiSpec = createDocument({
   },
   security: [{ BearerAuth: [] }],
   paths: {
+    '/api/health': {
+      get: {
+        security: [],
+        responses: {
+          '200': {
+            description: 'Health check endpoint',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/heatlhResponse' },
+              },
+            },
+          },
+          '500': {
+            description: 'Health check failed',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/healthErrorResponse' },
+              },
+            },
+          },
+        },
+      },
+    },
     '/api/register': {
       post: {
         security: [],
@@ -159,6 +185,7 @@ export const openApiSpec = createDocument({
               },
             },
           },
+          '500': { $ref: '#/components/responses/InternalServerError' },
         },
       },
     },
@@ -207,6 +234,7 @@ export const openApiSpec = createDocument({
               },
             },
           },
+          '500': { $ref: '#/components/responses/InternalServerError' },
         },
       },
     },
@@ -262,23 +290,7 @@ export const openApiSpec = createDocument({
               },
             },
           },
-          '500': {
-            description: 'Internal server error',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    error: {
-                      type: 'string',
-                      example: 'Internal server error',
-                    },
-                  },
-                  required: ['error'],
-                },
-              },
-            },
-          },
+          '500': { $ref: '#/components/responses/InternalServerError' },
         },
       },
     },
@@ -327,6 +339,7 @@ export const openApiSpec = createDocument({
               },
             },
           },
+          '500': { $ref: '#/components/responses/InternalServerError' },
         },
       },
     },
@@ -375,6 +388,23 @@ export const openApiSpec = createDocument({
               },
             },
           },
+          '403': {
+            description: 'User does  not have  permission to  view quote',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: {
+                      type: 'string',
+                      example: 'Forbidden',
+                    },
+                  },
+                  required: ['error'],
+                },
+              },
+            },
+          },
           '404': {
             description: 'Entry not found',
             content: {
@@ -392,6 +422,7 @@ export const openApiSpec = createDocument({
               },
             },
           },
+          '500': { $ref: '#/components/responses/InternalServerError' },
         },
       },
     },
