@@ -187,6 +187,23 @@ export const openApiSpec = createDocument({
               },
             },
           },
+          '401': {
+            description: 'Unauthorized  Request',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: {
+                      type: 'string',
+                      example: 'Unauthorized',
+                    },
+                  },
+                  required: ['error'],
+                },
+              },
+            },
+          },
           '400': {
             description: 'Invalid input or validation failed',
             content: {

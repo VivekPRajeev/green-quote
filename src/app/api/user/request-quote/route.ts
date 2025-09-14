@@ -28,17 +28,6 @@ export async function POST(req: NextRequest) {
     const systemSizeKw = validation.data.systemSizeKw;
     const downPayment = validation.data.downPayment;
 
-    if (
-      isNaN(monthlyConsumptionKwh) ||
-      isNaN(systemSizeKw) ||
-      isNaN(downPayment)
-    ) {
-      logResponse({ status: 400, url: req.url! });
-      return NextResponse.json(
-        { error: 'Invalid fields provided' },
-        { status: 400 }
-      );
-    }
     const systemPrice = systemSizeKw * 1200;
     const principalAmount = systemPrice - downPayment;
     if (principalAmount <= 0) {
