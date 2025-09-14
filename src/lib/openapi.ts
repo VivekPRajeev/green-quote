@@ -1,6 +1,7 @@
 import {
   createQuoteResponseSchema,
   createQuoteSchema,
+  getQuoteByIdResponseSchema,
   userQuotesResponseSchema,
 } from '@/schema/quote';
 import {
@@ -35,6 +36,7 @@ export const openApiSpec = createDocument({
       createQuote: createQuoteSchema,
       createQuoteResponse: createQuoteResponseSchema,
       userQuotesResponse: userQuotesResponseSchema,
+      userQuoteByIdResponse: getQuoteByIdResponseSchema,
     },
     securitySchemes: {
       BearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
@@ -318,6 +320,71 @@ export const openApiSpec = createDocument({
                     error: {
                       type: 'string',
                       example: 'User not found',
+                    },
+                  },
+                  required: ['error'],
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/api/quotes/{id}': {
+      get: {
+        responses: {
+          '200': {
+            description: 'User quote by ID successfully retrieved',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/userQuoteByIdResponse' },
+              },
+            },
+          },
+          '400': {
+            description: 'Bad Request',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: {
+                      type: 'string',
+                      example: 'Missing  Quote ID',
+                    },
+                  },
+                  required: ['error'],
+                },
+              },
+            },
+          },
+          '401': {
+            description: 'Unauthorized  Request',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: {
+                      type: 'string',
+                      example: 'Unauthorized',
+                    },
+                  },
+                  required: ['error'],
+                },
+              },
+            },
+          },
+          '404': {
+            description: 'Entry not found',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: {
+                      type: 'string',
+                      example: 'Quote not found',
                     },
                   },
                   required: ['error'],

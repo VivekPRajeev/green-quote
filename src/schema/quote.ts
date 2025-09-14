@@ -75,5 +75,38 @@ export const userQuotesResponseSchema = z.object({
   user: userSchema,
   quotes: z.array(quoteItemSchema),
 });
+
+const offerSchema = z.object({
+  apr: z.number().describe('Annual Percentage Rate'),
+  termYears: z.number().describe('Term length in years'),
+  principalUsed: z.number().describe('Principal amount financed'),
+  monthlyPayment: z.number().describe('Calculated monthly payment'),
+});
+
+export const quoteResponseSchema = z.object({
+  id: z.string().uuid().describe('Unique identifier of the quote'),
+  monthlyConsumptionKwh: z
+    .number()
+    .describe('Monthly electricity consumption in kWh'),
+  systemSizeKw: z.number().describe('Solar system size in kW'),
+  downPayment: z.number().nullable().describe('Initial down payment amount'),
+  principalAmount: z.number().nullable().describe('Principal amount'),
+  riskBand: z.string().describe('Risk band'),
+  systemPrice: z.number().describe('Total system price'),
+  offers: z.array(offerSchema).describe('Available financing offers'),
+  fullName: z.string().describe('Full name of the user'),
+  email: z.email().describe('User email address'),
+  address: z.string().nullable().describe('User address'),
+  user: z.object({
+    email: z.email(),
+    fullName: z.string(),
+  }),
+  createdAt: z.string().describe('When the quote was created'),
+});
+
+export const getQuoteByIdResponseSchema = z.object({
+  data: quoteResponseSchema,
+  status: z.number().describe('HTTP status code').default(200),
+});
 export type CreateQuoteInput = z.infer<typeof createQuoteSchema>;
 export type CreateQuoteResponse = z.infer<typeof createQuoteResponseSchema>;
