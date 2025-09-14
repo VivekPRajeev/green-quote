@@ -1,14 +1,15 @@
 import React from 'react';
-import AdminNav from '@/components/AdminNav';
+import Nav from '@/components/Nav';
 
 export default function UserLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const links = [{ name: 'Home', href: '/admin' }];
   return (
     <div className="min-h-screen flex flex-col">
-      <AdminNav />
+      <Nav links={links} />
       <main className="flex-1 bg-gray-100 p-4">{children}</main>
     </div>
   );

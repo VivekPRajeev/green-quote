@@ -3,10 +3,12 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-export default function Nav() {
+export default function Nav({
+  links = [],
+}: {
+  links?: { name: string; href: string }[];
+}) {
   const pathname = usePathname();
-
-  const links = [{ name: 'Home', href: '/user' }];
 
   return (
     <nav className="bg-gray-800 text-white p-4">

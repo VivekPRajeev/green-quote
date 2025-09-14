@@ -25,8 +25,6 @@ export async function GET(req: NextRequest) {
     const email = searchParams.get('email');
     const name = searchParams.get('name');
     const band = searchParams.get('band');
-    //const limit = parseInt(searchParams.get('limit') || '10', 10);
-    // const page = parseInt(searchParams.get('page') || '1', 10);
     const where: any = {};
     if (email) {
       where.user = { email: { contains: email, mode: 'insensitive' } };

@@ -5,10 +5,7 @@ import { logError, logRequest, logResponse } from '@/utils/logger';
 
 const prisma = new PrismaClient();
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(req: NextRequest, { params }: { params: any }) {
   logRequest({ method: req.method, url: req.url! });
   const id = params.id;
   const token = req.cookies.get('token')?.value ?? '';
