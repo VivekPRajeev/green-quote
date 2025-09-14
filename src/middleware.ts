@@ -31,7 +31,6 @@ export async function middleware(req: NextRequest) {
     }
     const requestHeaders = new Headers(req.headers);
     requestHeaders.set('x-user', JSON.stringify(payload));
-
     return NextResponse.next({
       request: { headers: requestHeaders },
     }); // authorized
@@ -48,5 +47,8 @@ export const config = {
     '/user/:path*',
     '/quotes',
     '/quotes/:path*',
+    '/api/quotes/:path*',
+    '/api/admin/:path*',
+    '/api/user/:path*',
   ],
 };
