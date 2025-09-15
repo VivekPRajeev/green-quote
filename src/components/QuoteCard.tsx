@@ -17,6 +17,30 @@ const QuoteCard: FC<QuoteCardProps> = ({ quoteDetails }) => {
   const [selectedOffer, setSelectedOffer] = useState<SelectedOffer | null>(
     null
   );
+  const [loading, setLoading] = useState(false);
+
+  const handleDownload = async (quoteId: string, plan: number) => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/quotes/${quoteId}/${plan}`);
+      if (!res.ok) throw new Error('Failed to download PDF');
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${quoteId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <>
       <div className="flex justify-between items-center mb-6">
@@ -105,14 +129,14 @@ const QuoteCard: FC<QuoteCardProps> = ({ quoteDetails }) => {
                 Monthly Payment
               </th>
               <th className="px-4 py-2 text-right text-sm font-medium text-gray-700">
-                View Schedule
+                Actions
               </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {quoteDetails &&
               quoteDetails?.offers?.map((item, index) => (
-                <tr key={index} onClick={() => setSelectedOffer(item)}>
+                <tr key={index}>
                   <td className="px-4 py-2 text-gray-700">
                     {item.termYears} Years
                   </td>
@@ -121,8 +145,21 @@ const QuoteCard: FC<QuoteCardProps> = ({ quoteDetails }) => {
                     {item.monthlyPayment} EUR
                   </td>
                   <td className="px-4 py-2 text-right">
-                    <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded">
-                      select
+                    <button
+                      className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded mr-1"
+                      onClick={() => setSelectedOffer(item)}
+                    >
+                      View
+                    </button>
+                    <button
+                      onClick={() =>
+                        handleDownload(quoteDetails.id, item.termYears)
+                      }
+                      disabled={loading}
+                      className={`px-4 py-1 rounded font-semibold text-white shadow 
+                       ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}
+                    >
+                      {loading ? 'Downloading...' : 'Download PDF'}
                     </button>
                   </td>
                 </tr>
