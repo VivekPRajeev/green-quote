@@ -116,3 +116,10 @@ export const adminQuoteSchema = z.object({
   createdAt: z.string().describe('Quote creation timestamp'),
   user: userSchema,
 });
+
+export const quotePrintParamsSchema = z.object({
+  id: z.uuid().describe('Quote ID'),
+  offer: z
+    .enum(['5', '10', '15'] as const)
+    .describe('Term of offer in 5 , 10 or 15 years'),
+});
