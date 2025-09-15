@@ -51,3 +51,12 @@ export interface UserQuotes {
   };
   quotes: Quote[];
 }
+
+export interface AmortizationEntry {
+  paymentNumber: number;
+  paymentDate: Date;
+  payment: number;
+  interest: number;
+  principal: number;
+  remainingBalance: number;
+}

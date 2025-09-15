@@ -2,7 +2,6 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import QuoteCard from './QuoteCard';
 import { APR_BY_BAND } from '@/constants/quote';
-import { formatDate } from '@/utils/calc';
 
 jest.mock('@/utils/calc', () => ({
   formatDate: jest.fn((date: string) => `Formatted-${date}`),

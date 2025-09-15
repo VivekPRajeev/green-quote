@@ -16,6 +16,7 @@
     "jose": "^6.1.0",
     "jsonwebtoken": "^9.0.2",
     "next": "15.5.3",
+    "puppeteer": "^24.20.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "swagger-ui-dist": "^5.29.0",
