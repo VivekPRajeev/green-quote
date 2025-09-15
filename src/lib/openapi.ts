@@ -432,6 +432,112 @@ export const openApiSpec = createDocument({
         },
       },
     },
+    '/api/quotes/{id}/{term}': {
+      get: {
+        tags: ['Quotes'],
+        summary: 'Download quote as PDF',
+        description:
+          'Generates and downloads the PDF for the given quote and term.',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+            description: 'The ID of the quote',
+          },
+          {
+            name: 'term',
+            in: 'path',
+            required: true,
+            schema: { type: 'integer', enum: [5, 10, 15] },
+            description: 'The offer term in years (5, 10, or 15)',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'PDF file successfully generated',
+            content: {
+              'application/pdf': {
+                schema: {
+                  type: 'string',
+                  format: 'binary',
+                },
+              },
+            },
+          },
+          '400': {
+            description: 'Bad Request',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: {
+                      type: 'string',
+                      example: 'Missing  Quote ID',
+                    },
+                  },
+                  required: ['error'],
+                },
+              },
+            },
+          },
+          '401': {
+            description: 'Unauthorized  Request',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: {
+                      type: 'string',
+                      example: 'Unauthorized',
+                    },
+                  },
+                  required: ['error'],
+                },
+              },
+            },
+          },
+          '403': {
+            description: 'User does  not have  permission to  view quote',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: {
+                      type: 'string',
+                      example: 'Forbidden',
+                    },
+                  },
+                  required: ['error'],
+                },
+              },
+            },
+          },
+          '404': {
+            description: 'Entry not found',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: {
+                      type: 'string',
+                      example: 'Quote not found',
+                    },
+                  },
+                  required: ['error'],
+                },
+              },
+            },
+          },
+          '500': { $ref: '#/components/responses/InternalServerError' },
+        },
+      },
+    },
     '/api/admin/quotes': {
       get: {
         tags: ['Admin', 'Quotes'],
