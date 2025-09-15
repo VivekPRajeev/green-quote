@@ -16,9 +16,9 @@ const RequestQuote: React.FC = () => {
     systemSizeKw: 0,
     downPayment: 0,
   });
-  const [systemPrice, setSystemPrice] = useState('');
+  const [systemPrice, setSystemPrice] = useState<number>(0);
   const [errors, setErrors] = useState<RequestQuoteErrors>({});
-  const [isloading, setIsLoading] = useState(false);
+  const [isloading, setIsLoading] = useState<boolean>(false);
   useEffect(() => {
     setIsLoading(true);
     fetch('/api/user/info')
@@ -42,7 +42,7 @@ const RequestQuote: React.FC = () => {
     setErrors({ ...errors, [e.target.name]: error });
     if (e.target.name === 'systemSizeKw') {
       const price = Number(e.target.value.trim()) * 1200;
-      if (!isNaN(price)) setSystemPrice(price.toString());
+      if (!isNaN(price)) setSystemPrice(price);
     }
   };
 
