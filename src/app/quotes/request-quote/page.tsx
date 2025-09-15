@@ -71,7 +71,7 @@ const RequestQuote: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setIsLoading(true);
     try {
       const res = await fetch('/api/quotes', {
         method: 'POST',
@@ -86,6 +86,8 @@ const RequestQuote: React.FC = () => {
     } catch (err) {
       console.error(err);
       alert('Network error');
+    } finally {
+      setIsLoading(false);
     }
   };
 
