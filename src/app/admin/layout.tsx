@@ -6,7 +6,7 @@ export default function UserLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const links = [{ name: 'Home', href: '/admin' }];
+  const links = [{ name: 'Home', href: '/admin/quotes' }];
   return (
     <div className="min-h-screen flex flex-col">
       <Nav links={links} />
