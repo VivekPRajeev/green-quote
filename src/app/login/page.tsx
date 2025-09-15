@@ -58,7 +58,7 @@ export default function LoginPage() {
         return;
       }
       if (data.isAdmin) router.push('/admin');
-      else router.push('/user');
+      else router.push('/quotes');
     } catch (err) {
       setErrors({ ...errors, api: 'Login Failed' });
       setLoading(false);

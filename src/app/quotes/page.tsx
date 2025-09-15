@@ -33,7 +33,7 @@ export default function UserPage() {
         <div className="p-8">
           <div className="flex justify-end mb-4">
             <Link
-              href="/user/request-quote"
+              href="/quotes/request-quote"
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition flex items-center justify-center cursor-pointer"
             >
               Request Quote
@@ -72,7 +72,7 @@ export default function UserPage() {
                       </td>
                       <td className="border border-gray-300 px-4 py-2">
                         <Link
-                          href={`/user/quote/${quote.id}`}
+                          href={`/quotes/${quote.id}`}
                           className="text-blue-600 hover:underline"
                         >
                           More Details
