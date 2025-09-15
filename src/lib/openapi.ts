@@ -242,9 +242,57 @@ export const openApiSpec = createDocument({
         },
       },
     },
-    '/api/user/request-quote': {
+    '/api/quotes': {
+      get: {
+        tags: ['Quotes'],
+        responses: {
+          '200': {
+            description: ' User quotes successfully retrieved',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/userQuotesResponse' },
+              },
+            },
+          },
+          '401': {
+            description: 'Unauthorized  Request',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: {
+                      type: 'string',
+                      example: 'Unauthorized',
+                    },
+                  },
+                  required: ['error'],
+                },
+              },
+            },
+          },
+          '404': {
+            description: 'Entry not found',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: {
+                      type: 'string',
+                      example: 'User not found',
+                    },
+                  },
+                  required: ['error'],
+                },
+              },
+            },
+          },
+          '500': { $ref: '#/components/responses/InternalServerError' },
+        },
+      },
       post: {
-        tags: ['User', 'Quotes'],
+        tags: ['Quotes'],
 
         requestBody: {
           content: {
@@ -289,56 +337,6 @@ export const openApiSpec = createDocument({
                     error: {
                       type: 'string',
                       example: 'Invalid fields provided',
-                    },
-                  },
-                  required: ['error'],
-                },
-              },
-            },
-          },
-          '500': { $ref: '#/components/responses/InternalServerError' },
-        },
-      },
-    },
-    '/api/quotes': {
-      get: {
-        tags: ['Quotes'],
-        responses: {
-          '200': {
-            description: ' User quotes successfully retrieved',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/userQuotesResponse' },
-              },
-            },
-          },
-          '401': {
-            description: 'Unauthorized  Request',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    error: {
-                      type: 'string',
-                      example: 'Unauthorized',
-                    },
-                  },
-                  required: ['error'],
-                },
-              },
-            },
-          },
-          '404': {
-            description: 'Entry not found',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    error: {
-                      type: 'string',
-                      example: 'User not found',
                     },
                   },
                   required: ['error'],
