@@ -8,7 +8,7 @@ quote for a residential solar system and view results
 - **Frontend & Backend**: [Next.js 15](https://nextjs.org/)
 - **Database ORM**: [Prisma](https://www.prisma.io/)
 - **Database**: [PostgreSQL 15](https://www.postgresql.org/)
-- **Authentication**: [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken), [jose](https://github.com/panva/jose)
+- **Authentication**: [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)
 - **API Docs**: [zod-openapi](https://github.com/asteasolutions/zod-to-openapi) + [swagger-ui-react](https://github.com/swagger-api/swagger-ui)
 - **Styling**: [TailwindCSS](https://tailwindcss.com/)
 - **PDF Rendering**: [Puppeteer](https://pptr.dev/)

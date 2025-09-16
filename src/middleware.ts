@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { jwtVerify } from 'jose';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { logError } from './utils/logger';
 
 function handleUnauthorized(req: NextRequest) {
@@ -21,10 +21,10 @@ export async function middleware(req: NextRequest) {
   }
 
   try {
-    const { payload } = await jwtVerify(
-      token,
-      new TextEncoder().encode(process.env.JWT_SECRET)
-    );
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET is not defined in environment variables');
+    }
+    const { payload } = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
 
     if (req.nextUrl.pathname.startsWith('/admin') && !payload.isAdmin) {
       return NextResponse.redirect(new URL('/unauthorized', req.url)); // redirect non-admin users
