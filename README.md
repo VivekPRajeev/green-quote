@@ -207,3 +207,10 @@ docker-compose down
 
 - Integrate an IdP such as Keycloak
 - E2E test (Playwright) covering sign-in → quote → view results
+
+### Design Notes
+
+The project is built using Next.js (v15) with React (v19) for a modern, server-side rendered web application and implemented using Typescript for type safety, improving maintainability and reducing runtime errors. For the database PostgreSQL is chosen as the relational database for its reliability, strong ACID compliance, and support for advanced queries.
+Prisma ORM is used to interact with PostgreSQL, providing type-safe database access and migration , this allows NextJs to safely communicate with the database.Passwords are hashed using bcryptjs to ensure security of sensitive data.
+
+Puppeteer is used for PDF generation because it provides a way to programmatically render web pages exactly as a browser would, and then export them as PDFs. Puppeteer uses a headless version of Chromium, so the PDF output looks exactly like how the page would appear in a real browser, including CSS, images, and fonts. Unlike simple HTML-to-PDF converters, Puppeteer can render JavaScript-heavy pages before generating the PDF which is ideal since the pages include React components.
