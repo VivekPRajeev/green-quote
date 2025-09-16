@@ -202,3 +202,8 @@ docker-compose down
 - web → Production container (optimized, no hot reload)
 - web-dev → Development container (hot reload, bind mount local code)
 - db → PostgreSQL database container
+
+## Todo
+
+- Integrate an IdP such as Keycloak
+- E2E test (Playwright) covering sign-in → quote → view results
