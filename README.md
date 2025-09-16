@@ -129,7 +129,7 @@ npm run test:coverage
 
 ```
 
-Linting & Formatting
+#### Linting & Formatting
 
 Run ESLint:
 
