@@ -28,7 +28,7 @@ export default function UserPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-3xl">
+      <div className="bg-white shadow-md rounded-lg p-6 w-full">
         <div className="text-2xl font-bold mb-4">User Dashboard</div>
         <div className="p-8">
           <div className="flex justify-end mb-4">

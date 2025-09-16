@@ -62,8 +62,8 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-3xl">
-        <div className="text-2xl font-bold mb-4">Admin Dashboard</div>
+      <div className="bg-white shadow-md rounded-lg p-6 w-full">
+        <div className="text-2xl font-bold mb-4">Admin Dashboards</div>
 
         <div className="p-8">
           <AdminQuoteSearch submitHandler={handleSearch} />
@@ -71,7 +71,7 @@ export default function AdminPage() {
           {loading ? (
             <Loader />
           ) : (
-            <table className="w-full border-collapse border border-gray-300">
+            <table className="w-full border-collapse border border-gray-300 table-auto">
               <thead>
                 <tr>
                   <th className="border border-gray-300 px-4 py-2">
