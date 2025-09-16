@@ -1,6 +1,7 @@
 services:
   db:
-    image: postgres:15
+    image: postgres:15-alpine
+    container_name: postgres_db
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -9,7 +10,41 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
+
+  web:
+    build: .
+    container_name: nextjs_app
+    restart: always
+    env_file: .env
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    command: >
+      sh -c "npx wait-on tcp:db:5432 &&
+             npx prisma migrate deploy &&
+             npm run seed &&
+             npm run start"
+
+  web-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: nextjs_app_dev
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - '3001:3000'
+    depends_on:
+      - db
+    volumes:
+      - .:/app # bind mount for live code reload
+      - /app/node_modules # prevent overwriting node_modules
+    command: >
+      sh -c "npx wait-on tcp:db:5432 &&
+             npx prisma migrate dev &&
+             npm run dev"
 
 volumes:
-  db_data:
+  pgdata:

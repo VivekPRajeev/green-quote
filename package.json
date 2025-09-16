@@ -4,8 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "prisma generate",
     "build": "next build",
     "start": "next start",
+    "seed": "node prisma/seed.js",
     "lint": "eslint",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -48,6 +50,7 @@
     "prisma": "^6.16.1",
     "tailwindcss": "^4",
     "ts-jest": "^29.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wait-on": "^8.0.5"
   }
 }

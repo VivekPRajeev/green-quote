@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
         email: true,
         fullName: true,
         isAdmin: true,
-      } as Prisma.UserSelect,
+      },
     });
     if (!userDetails) {
       logResponse({ status: 404, url: req.url! });

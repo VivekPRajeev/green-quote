@@ -3,7 +3,6 @@ import { FlatCompat } from '@eslint/eslintrc';
 // Provides compatibility with older ESLint configs
 const compat = new FlatCompat({
   baseDirectory: process.cwd(),
-  recommended: true,
 });
 
 export default [

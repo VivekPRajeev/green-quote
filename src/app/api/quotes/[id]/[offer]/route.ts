@@ -44,7 +44,7 @@ export async function GET(req: NextRequest, { params }: { params: any }) {
         address: true,
         userId: true,
         createdAt: true,
-      } as Prisma.QuoteSelect,
+      },
     });
 
     if (!quote) {
@@ -218,7 +218,11 @@ export async function GET(req: NextRequest, { params }: { params: any }) {
   `;
 
     // Launch Puppeteer and generate PDF
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({
+      executablePath:
+        process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium-browser',
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: 'networkidle0' });
 

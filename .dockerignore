@@ -1,0 +1,38 @@
+# Node modules & logs
+node_modules
+npm-debug.log
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build output (we copy only what we need in Dockerfile)
+.next/cache
+.next/server/app
+
+# Test & lint configs
+.eslintrc.js
+eslint.config.js
+.prettierrc
+.prettierignore
+jest.config.js
+jest.setup.ts
+babel.config.js
+babel.config.test.js
+babelrc.config.js
+
+# Editor / system files
+*.swp
+*.swo
+*.bak
+*.tmp
+.DS_Store
+.idea
+.vscode
+
+# Env files (use docker secrets / env vars instead)
+.env.local
+.env.development
+.env.test
+
+# Ignore Prisma client cache
+prisma/generated

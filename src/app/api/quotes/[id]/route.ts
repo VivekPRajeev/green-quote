@@ -39,7 +39,7 @@ export async function GET(req: NextRequest, { params }: { params: any }) {
         userId: true,
         user: { select: { email: true, fullName: true } },
         createdAt: true,
-      } as Prisma.QuoteSelect,
+      },
     });
 
     if (!quote) {

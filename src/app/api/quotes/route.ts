@@ -95,7 +95,7 @@ export async function POST(req: NextRequest) {
         principalAmount,
         riskBand,
         systemPrice,
-        offers: quotes as unknown as Prisma.JsonArray,
+        offers: JSON.parse(JSON.stringify(quotes)), // had issues with docker build on Prisma.InputJsonValue
         user: { connect: { id: userId } },
         fullName: body.name,
         email: body.email,
