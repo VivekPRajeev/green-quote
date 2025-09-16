@@ -103,7 +103,7 @@ If mounted at /api/docs, open:
 for dev enviornments you can find the doc at :
 http://localhost:3001/api/docs
 
-### 6. 🧪 Development & Testing
+### 6. Development & Testing
 
 Run tests
 
